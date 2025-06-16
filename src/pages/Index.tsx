@@ -58,8 +58,8 @@ const Index = () => {
     }
 
     // Calculate expected job count for dynamic status updates
-    const baseJobCount = 15000;
-    const variationRange = 35000;
+    const baseJobCount = 1000;
+    const variationRange = 5000;
     const expectedJobCount = Math.floor(Math.random() * variationRange) + baseJobCount;
     const formatCount = (count: number) => count.toLocaleString();
 
