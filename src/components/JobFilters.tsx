@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -21,11 +22,20 @@ const JobFilters: React.FC<JobFiltersProps> = ({
   onSearch,
   isSearching
 }) => {
-  const countries = ["Australia", "All Countries", "USA", "UK", "India", "Singapore", "Canada", "Germany", "Japan", "Brazil", "South Africa"];
-  const domains = ["Banking & Financial Services", "Insurance", "Investment Management", "FinTech", "All Finance", "All Domains", "Government", "Manufacturing", "Mining", "Healthcare", "Retail", "Technology", "Energy", "Education", "Telecommunications", "Real Estate", "Transport & Logistics"];
+  const countries = [
+    "Australia", "All Countries", "USA", "UK", "India", "Singapore", "Canada", 
+    "Germany", "Japan", "Brazil", "South Africa"
+  ];
+
+  const domains = [
+    "Banking & Financial Services", "Insurance", "Investment Management", 
+    "FinTech", "All Finance", "All Domains", "Government", "Manufacturing", 
+    "Mining", "Healthcare", "Retail", "Technology", "Energy", "Education",
+    "Telecommunications", "Real Estate", "Transport & Logistics"
+  ];
 
   const updateParam = (key: string, value: string) => {
-    setSearchParams(prev => ({ ...prev, [key]: value }));
+    setSearchParams({ ...searchParams, [key]: value });
   };
 
   return (
@@ -39,9 +49,9 @@ const JobFilters: React.FC<JobFiltersProps> = ({
       <CardContent className="space-y-4">
         <div>
           <Label htmlFor="country">Country</Label>
-          <Select value={searchParams.country} onValueChange={(value) => updateParam('country', value)}>
+          <Select value={searchParams.country || "Australia"} onValueChange={(value) => updateParam('country', value)}>
             <SelectTrigger>
-              <SelectValue placeholder="Select Country" />
+              <SelectValue placeholder="Australia" />
             </SelectTrigger>
             <SelectContent>
               {countries.map((country) => (
@@ -55,9 +65,9 @@ const JobFilters: React.FC<JobFiltersProps> = ({
 
         <div>
           <Label htmlFor="domain">Business Domain</Label>
-          <Select value={searchParams.domain} onValueChange={(value) => updateParam('domain', value)}>
+          <Select value={searchParams.domain || "Banking & Financial Services"} onValueChange={(value) => updateParam('domain', value)}>
             <SelectTrigger>
-              <SelectValue placeholder="Select Domain" />
+              <SelectValue placeholder="Banking & Financial Services" />
             </SelectTrigger>
             <SelectContent>
               {domains.map((domain) => (
