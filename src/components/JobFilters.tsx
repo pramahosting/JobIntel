@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -20,23 +19,54 @@ const JobFilters: React.FC<JobFiltersProps> = ({
   searchParams,
   setSearchParams,
   onSearch,
-  isSearching
+  isSearching,
 }) => {
-  const countries = [
-    "Australia", "All Countries", "USA", "UK", "India", "Singapore", "Canada", 
-    "Germany", "Japan", "Brazil", "South Africa"
-  ];
+  const countries = useMemo(
+    () => [
+      "Australia",
+      "All Countries",
+      "USA",
+      "UK",
+      "India",
+      "Singapore",
+      "Canada",
+      "Germany",
+      "Japan",
+      "Brazil",
+      "South Africa",
+    ],
+    []
+  );
 
-  const domains = [
-    "Banking & Financial Services", "Insurance", "Investment Management", 
-    "FinTech", "All Finance", "All Domains", "Government", "Manufacturing", 
-    "Mining", "Healthcare", "Retail", "Technology", "Energy", "Education",
-    "Telecommunications", "Real Estate", "Transport & Logistics"
-  ];
+  const domains = useMemo(
+    () => [
+      "Banking & Financial Services",
+      "Insurance",
+      "Investment Management",
+      "FinTech",
+      "All Finance",
+      "All Domains",
+      "Government",
+      "Manufacturing",
+      "Mining",
+      "Healthcare",
+      "Retail",
+      "Technology",
+      "Energy",
+      "Education",
+      "Telecommunications",
+      "Real Estate",
+      "Transport & Logistics",
+    ],
+    []
+  );
 
-  const updateParam = (key: string, value: string) => {
-    setSearchParams({ ...searchParams, [key]: value });
-  };
+  const updateParam = useCallback(
+    (key: string, value: string) => {
+      setSearchParams({ ...searchParams, [key]: value });
+    },
+    [searchParams, setSearchParams]
+  );
 
   return (
     <Card className="sticky top-24">
@@ -49,7 +79,10 @@ const JobFilters: React.FC<JobFiltersProps> = ({
       <CardContent className="space-y-4">
         <div>
           <Label htmlFor="country">Country</Label>
-          <Select value={searchParams.country || "Australia"} onValueChange={(value) => updateParam('country', value)}>
+          <Select
+            value={searchParams.country || "Australia"}
+            onValueChange={(value) => updateParam("country", value)}
+          >
             <SelectTrigger>
               <SelectValue placeholder="Australia" />
             </SelectTrigger>
@@ -65,7 +98,10 @@ const JobFilters: React.FC<JobFiltersProps> = ({
 
         <div>
           <Label htmlFor="domain">Business Domain</Label>
-          <Select value={searchParams.domain || "Banking & Financial Services"} onValueChange={(value) => updateParam('domain', value)}>
+          <Select
+            value={searchParams.domain || "Banking & Financial Services"}
+            onValueChange={(value) => updateParam("domain", value)}
+          >
             <SelectTrigger>
               <SelectValue placeholder="Banking & Financial Services" />
             </SelectTrigger>
@@ -79,10 +115,11 @@ const JobFilters: React.FC<JobFiltersProps> = ({
           </Select>
         </div>
 
-        <Button 
-          onClick={onSearch} 
+        <Button
+          onClick={onSearch}
           disabled={isSearching}
           className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
+          aria-label="Start job scraping"
         >
           {isSearching ? (
             <>
