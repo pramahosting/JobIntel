@@ -1,8 +1,5 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Database, Download } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import AgentConfigPanel from '@/components/AgentConfigPanel';
@@ -10,7 +7,6 @@ import AnalyticsMetrics from '@/components/AnalyticsMetrics';
 import JobDataTable from '@/components/JobDataTable';
 import { JobData, generateMockJobData, clusterJobs } from '@/utils/jobDataGenerator';
 
-// Support for multiple parallel agent instances
 interface AgentInstance {
   id: string;
   config: {
@@ -47,7 +43,7 @@ const Index = () => {
 
   const handleRunAgent = async () => {
     const instance = activeInstance;
-    
+
     if (!instance.config.country || !instance.config.domain) {
       toast({
         title: "Configuration Required",
@@ -57,89 +53,40 @@ const Index = () => {
       return;
     }
 
-    // Calculate expected job count for dynamic status updates
-    const baseJobCount = 15000;
-    const variationRange = 35000;
-    const expectedJobCount = Math.floor(Math.random() * variationRange) + baseJobCount;
+    const expectedJobCount = 1000; // 🔹 Limit job count for performance
     const formatCount = (count: number) => count.toLocaleString();
 
     updateInstance(instance.id, { 
       isRunning: true, 
       currentStatus: 'Initializing Agent for data extraction...' 
     });
-    
+
     toast({
       title: "Agent Started",
       description: `Extracting job data from ${instance.config.country} - ${instance.config.domain}`,
     });
 
-    // Enhanced processing stages with dynamic record counts
-    setTimeout(() => {
-      const portalsConnected = Math.floor(Math.random() * 8) + 12;
-      updateInstance(instance.id, { 
-        currentStatus: `Connecting to ${portalsConnected} job portals simultaneously...` 
-      });
-    }, 500);
+    setTimeout(() => updateInstance(instance.id, { currentStatus: `Connecting to 15 job portals simultaneously...` }), 200);
+    setTimeout(() => updateInstance(instance.id, { currentStatus: `Scanning ${formatCount(Math.floor(expectedJobCount * 0.2))} job listings...` }), 400);
+    setTimeout(() => updateInstance(instance.id, { currentStatus: `Extracting descriptions from ${formatCount(Math.floor(expectedJobCount * 0.4))} postings...` }), 600);
+    setTimeout(() => updateInstance(instance.id, { currentStatus: `Analyzing data for ${formatCount(Math.floor(expectedJobCount * 0.6))} positions...` }), 800);
+    setTimeout(() => updateInstance(instance.id, { currentStatus: `Identifying companies for ${formatCount(Math.floor(expectedJobCount * 0.8))} jobs...` }), 1000);
+    setTimeout(() => updateInstance(instance.id, { currentStatus: `Running clustering on ${formatCount(expectedJobCount)} records...` }), 1200);
 
     setTimeout(() => {
-      const scannedListings = Math.floor(expectedJobCount * 0.2);
-      updateInstance(instance.id, { 
-        currentStatus: `Scanning ${formatCount(scannedListings)} job listings across all major platforms...` 
-      });
-    }, 1000);
-
-    setTimeout(() => {
-      const extractedJobs = Math.floor(expectedJobCount * 0.4);
-      updateInstance(instance.id, { 
-        currentStatus: `Extracting comprehensive descriptions from ${formatCount(extractedJobs)} job postings...` 
-      });
-    }, 1500);
-
-    setTimeout(() => {
-      const analyzedJobs = Math.floor(expectedJobCount * 0.6);
-      updateInstance(instance.id, { 
-        currentStatus: `Analyzing skills and compensation data for ${formatCount(analyzedJobs)} positions...` 
-      });
-    }, 2000);
-
-    setTimeout(() => {
-      const companiesIdentified = Math.floor(expectedJobCount * 0.8);
-      updateInstance(instance.id, { 
-        currentStatus: `Identifying company types and domains for ${formatCount(companiesIdentified)} job listings...` 
-      });
-    }, 2500);
-
-    setTimeout(() => {
-      const jobsForClustering = Math.floor(expectedJobCount * 0.9);
-      updateInstance(instance.id, { 
-        currentStatus: `Processing advanced clustering algorithms on ${formatCount(jobsForClustering)} job records...` 
-      });
-    }, 3000);
-
-    setTimeout(() => {
-      const insightsGenerated = expectedJobCount;
-      updateInstance(instance.id, { 
-        currentStatus: `Generating market intelligence insights from ${formatCount(insightsGenerated)} data points...` 
-      });
-    }, 3500);
-
-    setTimeout(() => {
-      // Generate significantly more data for limitless extraction
-      const generatedData = generateMockJobData(instance.config.country, instance.config.domain, true);
-      const clustered = clusterJobs(generatedData);
-      
+      const generatedData = generateMockJobData(instance.config.country, instance.config.domain, false);
+      const clustered = clusterJobs(generatedData).slice(0, 1000);
       updateInstance(instance.id, {
         jobData: generatedData,
         clusteredJobs: clustered,
         isRunning: false,
         currentStatus: ''
       });
-      
       toast({
         title: "Data Extraction Complete",
-        description: `Successfully extracted ${generatedData.length.toLocaleString()} job listings with ${new Set(clustered.map(j => j.jobGroup)).size} distinct job clusters identified.`,
+        description: `Extracted ${clustered.length.toLocaleString()} job listings in ${new Set(clustered.map(j => j.jobGroup)).size} clusters.`,
       });
-    }, 4000);
+    }, 1500);
   };
 
   const handleExportData = () => {
@@ -152,25 +99,6 @@ const Index = () => {
       return;
     }
 
-    // Sort jobs by job group to ensure jobs from same group appear together
-    const sortedJobData = [...activeInstance.clusteredJobs].sort((a, b) => {
-      if (a.jobGroup && b.jobGroup) {
-        return a.jobGroup.localeCompare(b.jobGroup);
-      }
-      return 0;
-    });
-
-    // Group jobs by jobGroup
-    const groupedJobs: { [key: string]: JobData[] } = {};
-    sortedJobData.forEach(job => {
-      const group = job.jobGroup || 'Uncategorized';
-      if (!groupedJobs[group]) {
-        groupedJobs[group] = [];
-      }
-      groupedJobs[group].push(job);
-    });
-
-    // Create Excel-compatible CSV with merged cell structure
     const headers = [
       "Job Group", "Standard Skills", "Job Title", "Company", "Company Type", 
       "Location", "Experience", "Key Skills", "Soft Skills", "Tools & Tech", 
@@ -178,16 +106,19 @@ const Index = () => {
       "Working Function", "Experience Level", "Education Required", "Responsibilities"
     ];
 
-    const csvRows: string[] = [];
+    const groupedJobs: { [key: string]: JobData[] } = {};
+    activeInstance.clusteredJobs.forEach(job => {
+      const group = job.jobGroup || 'Uncategorized';
+      if (!groupedJobs[group]) groupedJobs[group] = [];
+      groupedJobs[group].push(job);
+    });
 
-    // Add formatting instructions for Excel (top-left alignment)
-    csvRows.push('sep=,'); // Excel separator directive
-    
+    const csvRows = ['sep=,'];
     Object.entries(groupedJobs).forEach(([groupName, jobs]) => {
-      jobs.forEach((job, jobIndex) => {
+      jobs.forEach((job, index) => {
         const row = [
-          jobIndex === 0 ? groupName : '', // Job Group (merged cell - only for first job in group)
-          jobIndex === 0 ? (job.standardSkills || []).join('; ') : '', // Standard Skills (merged cell - only for first job in group)
+          index === 0 ? groupName : '',
+          index === 0 ? (job.standardSkills || []).join('; ') : '',
           job.jobTitle,
           job.companyName,
           job.companyType || '',
@@ -210,31 +141,16 @@ const Index = () => {
       });
     });
 
-    const csvContent = [
-      headers.join(','),
-      ...csvRows
-    ].join('\n');
-
-    // Download CSV with Excel formatting
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob([headers.join(',') + '\n' + csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-    link.setAttribute('href', url);
-    link.setAttribute('download', `jobintel_${activeInstance.config.country}_${activeInstance.config.domain.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.csv`);
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
+    link.href = URL.createObjectURL(blob);
+    link.download = `jobintel_${activeInstance.config.country}_${activeInstance.config.domain.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.csv`;
     link.click();
-    document.body.removeChild(link);
-
-    toast({
-      title: "Excel Export Complete",
-      description: `Successfully exported ${activeInstance.clusteredJobs.length.toLocaleString()} job records with merged cells and proper formatting.`,
-    });
+    toast({ title: "Excel Export Complete", description: `Exported ${activeInstance.clusteredJobs.length.toLocaleString()} job records.` });
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      {/* Header */}
       <div className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
@@ -261,7 +177,6 @@ const Index = () => {
 
       <div className="container mx-auto px-6 py-8">
         <div className="grid lg:grid-cols-4 gap-6">
-          {/* Agent Configuration Panel */}
           <div className="lg:col-span-1">
             <AgentConfigPanel
               config={activeInstance.config}
@@ -271,13 +186,8 @@ const Index = () => {
               currentStatus={activeInstance.currentStatus}
             />
           </div>
-
-          {/* Main Content Area */}
           <div className="lg:col-span-3 space-y-6">
-            {/* Analytics Metrics */}
             <AnalyticsMetrics jobData={activeInstance.clusteredJobs} />
-
-            {/* Job Data Table */}
             <JobDataTable jobData={activeInstance.clusteredJobs} />
           </div>
         </div>
