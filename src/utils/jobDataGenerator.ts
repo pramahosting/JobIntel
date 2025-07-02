@@ -98,6 +98,22 @@ const companyData = {
         'Computershare': 'Technology Services',
         'NextDC': 'Data Centers'
       }
+    },
+    'Aviation Infrastructure': {
+      companies: [
+        'Sydney Airport', 'Melbourne Airport', 'Brisbane Airport Corporation',
+        'Perth Airport', 'Adelaide Airport', 'Gold Coast Airport',
+        'Airservices Australia'
+      ],
+      types: {
+        'Sydney Airport': 'Airport Operator',
+        'Melbourne Airport': 'Airport Operator',
+        'Brisbane Airport Corporation': 'Airport Operator',
+        'Perth Airport': 'Airport Operator',
+        'Adelaide Airport': 'Airport Operator',
+        'Gold Coast Airport': 'Airport Operator',
+        'Airservices Australia': 'Air Navigation Services'
+      }
     }
   },
   'USA': {
