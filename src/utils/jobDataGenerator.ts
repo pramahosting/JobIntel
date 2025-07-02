@@ -169,6 +169,25 @@ const companyData = {
       }
     }
   }
+},
+'India': {
+  'Aviation Infrastructure': {
+    companies: [
+      'GMR Group', 'GVK Industries', 'Airports Authority of India (AAI)',
+      'BIAL (Bangalore International Airport Limited)', 'Mumbai International Airport Ltd (MIAL)',
+      'Delhi International Airport Limited (DIAL)', 'Adani Airport Holdings', 'Hyderabad International Airport Ltd (HIAL)'
+    ],
+    types: {
+      'GMR Group': 'Infrastructure & Airport Operator',
+      'GVK Industries': 'Infrastructure & Airport Operator',
+      'Airports Authority of India (AAI)': 'Government',
+      'BIAL (Bangalore International Airport Limited)': 'Airport Operations',
+      'Mumbai International Airport Ltd (MIAL)': 'Airport Operations',
+      'Delhi International Airport Limited (DIAL)': 'Airport Operations',
+      'Adani Airport Holdings': 'Private Infrastructure',
+      'Hyderabad International Airport Ltd (HIAL)': 'Airport Operations'
+    }
+  }
 };
 
 const locationData = {
@@ -199,7 +218,13 @@ const skillsDatabase = {
   'Technology': [
     'Software Development', 'Cloud Computing', 'Data Science', 'Machine Learning', 'DevOps',
     'Cybersecurity', 'API Development', 'Database Management', 'System Architecture', 'Agile Methodology'
-  ]
+  ],
+  'Aviation Infrastructure': [
+  'Airport Operations Management', 'Air Traffic Control Coordination', 'Civil Aviation Regulations',
+  'Infrastructure Planning', 'Flight Scheduling Systems', 'Aviation Safety Management',
+  'Passenger Flow Optimization', 'Airport Security Compliance', 'Baggage Handling Systems',
+  'Aviation Logistics and Ground Handling'
+]
 };
 
 const jobTitlesDatabase = {
@@ -224,6 +249,10 @@ const jobTitlesDatabase = {
     'Software Engineer', 'Data Scientist', 'DevOps Engineer', 'Product Manager',
     'Cloud Architect', 'Security Engineer', 'Full Stack Developer', 'System Administrator',
     'UX/UI Designer', 'Technical Lead', 'Platform Engineer', 'Machine Learning Engineer'
+  ],
+    'Aviation Infrastructure': [
+    'Airport Operations Manager', 'Aviation Project Engineer', 'Terminal Operations Specialist',
+    'Ground Handling Supervisor', 'Infrastructure Planning Analyst', 'Airside Safety Manager'
   ]
 };
 
@@ -248,7 +277,12 @@ const toolsDatabase = {
   'Technology': [
     'JavaScript', 'Python', 'Java', 'React', 'Node.js', 'AWS', 'Docker', 'Kubernetes',
     'Git', 'Jenkins', 'MongoDB', 'PostgreSQL'
-  ]
+  ],
+  'Aviation Infrastructure': [
+  'AODB (Airport Operational Database)', 'RMS (Resource Management System)', 'SCADA Systems',
+  'Flight Information Display System (FIDS)', 'AutoCAD', 'Primavera P6', 'GIS Tools',
+  'CCTV & Surveillance Systems', 'Access Control Systems', 'Airport Billing Systems'
+]
 };
 
 const certificationsDatabase = {
@@ -267,7 +301,11 @@ const certificationsDatabase = {
   'Technology': [
     'AWS Certified Solutions Architect', 'Google Cloud Professional', 'Microsoft Azure Certification',
     'Certified Kubernetes Administrator', 'CompTIA Security+', 'Scrum Master Certification'
-  ]
+  ],
+  'Aviation Infrastructure': [
+  'ICAO Safety Management Certification', 'DGCA Certification (India)', 'IATA Airport Operations',
+  'Airport Security Training', 'Aerodrome Operations Certification'
+]
 };
 
 const workingFunctionsDatabase = {
@@ -286,7 +324,11 @@ const workingFunctionsDatabase = {
   'Technology': [
     'Software Development', 'Data & Analytics', 'Infrastructure & DevOps', 'Product Management',
     'Security & Compliance', 'Cloud & Platform', 'Research & Development'
-  ]
+  ],
+  'Aviation Infrastructure': [
+  'Airport Operations', 'Infrastructure Planning', 'Security & Compliance', 'Ground Services Management',
+  'Passenger Services', 'Flight Operations', 'Aviation Logistics'
+]
 };
 
 function getRandomItems<T>(arr: T[], count: number): T[] {
@@ -580,4 +622,5 @@ function generateFallbackData(
 
   return jobs;
 }
+
 
