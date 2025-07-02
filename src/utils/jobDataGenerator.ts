@@ -215,7 +215,8 @@ const skillsDatabase = {
   'Technology': [
     'Software Development', 'Cloud Computing', 'Data Science', 'Machine Learning', 'DevOps',
     'Cybersecurity', 'API Development', 'Database Management', 'System Architecture', 'Agile Methodology'
-  ]
+  ],
+  
 };
 
 const jobTitlesDatabase = {
@@ -481,10 +482,8 @@ export function clusterJobs(jobs: JobData[]): JobData[] {
 // Enhanced data generation for limitless extraction
 export function generateMockJobData(country: string, domain: string, limitlessMode: boolean = false): JobData[] {
   // Limitless mode generates significantly more jobs (15,000-50,000)
-  const baseJobCount = limitlessMode ? 15000 : 5000;
-  const variationRange = limitlessMode ? 35000 : 1000;
-  const jobCount = Math.floor(Math.random() * variationRange) + baseJobCount;
-  
+  const expectedJobCount = 1000; // 🧩 Match backend limit for accurate progress UI
+
   const jobs: JobData[] = [];
   
   // Get country and domain specific data
