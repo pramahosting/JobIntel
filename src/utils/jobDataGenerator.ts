@@ -603,9 +603,12 @@ export function generateMockJobData(
   const maxJobs = 5000; // ✳️ Change 1: hard limit
   const jobs: JobData[] = [];
 
-  const countryData = companyData[country] || companyData['USA'];
-  const domainData = countryData[domain] || Object.values(countryData)[0];
-
+  const countryData = companyData[country] || companyData['USA'];const normalizedDomain = domain.trim().toLowerCase();
+  const domainKey = Object.keys(countryData).find(
+    key => key.trim().toLowerCase() === normalizedDomain
+    );
+  const domainData = domainKey ? countryData[domainKey] : Object.values(countryData)[0];
+  
   const relevantCompanies = domainData.companies;
   const companyTypes = domainData.types;
   const relevantLocations = locationData[country] || ['Location Not Specified'];
