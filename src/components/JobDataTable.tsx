@@ -1,174 +1,224 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
+import React, { useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { ExternalLink } from 'lucide-react';
-import { JobData } from '@/utils/jobDataGenerator';
+import { Database, Download, ArrowUp } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import AgentConfigPanel from '@/components/AgentConfigPanel';
+import AnalyticsMetrics from '@/components/AnalyticsMetrics';
+import JobDataTable from '@/components/JobDataTable';
+import { JobData, generateMockJobData, clusterJobs } from '@/utils/jobDataGenerator';
 
-interface JobDataTableProps {
+interface AgentInstance {
+  id: string;
+  config: {
+    country: string;
+    domain: string;
+  };
+  isRunning: boolean;
+  currentStatus: string;
   jobData: JobData[];
+  clusteredJobs: JobData[];
 }
 
-const JobDataTable: React.FC<JobDataTableProps> = ({ jobData }) => {
-  if (jobData.length === 0) {
-    return (
-      <Card>
-        <CardContent className="p-12 text-center">
-          <div className="text-gray-500">
-            <div className="text-lg font-medium mb-2">No Job Data Available</div>
-            <div className="text-sm">Configure the agent and click "Run Agent" to extract job market data</div>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
+const Index = () => {
+  const { toast } = useToast();
+  const rightPaneRef = useRef<HTMLDivElement>(null);
 
-  // Sort jobs by job group to ensure jobs from same group appear together
-  const sortedJobData = [...jobData].sort((a, b) => {
-    if (a.jobGroup && b.jobGroup) {
-      return a.jobGroup.localeCompare(b.jobGroup);
+  const [agentInstances, setAgentInstances] = useState<AgentInstance[]>([
+    {
+      id: 'main',
+      config: { country: 'Australia', domain: 'Banking & Financial Services' },
+      isRunning: false,
+      currentStatus: '',
+      jobData: [],
+      clusteredJobs: []
     }
-    return 0;
-  });
+  ]);
+  const [activeInstanceId, setActiveInstanceId] = useState('main');
 
-  // Group jobs by jobGroup for cell merging
-  const groupedJobs: { [key: string]: JobData[] } = {};
-  sortedJobData.forEach(job => {
-    const group = job.jobGroup || 'Uncategorized';
-    if (!groupedJobs[group]) {
-      groupedJobs[group] = [];
+  const activeInstance = agentInstances.find(instance => instance.id === activeInstanceId) || agentInstances[0];
+
+  const updateInstance = (id: string, updates: Partial<AgentInstance>) => {
+    setAgentInstances(prev => prev.map(instance =>
+      instance.id === id ? { ...instance, ...updates } : instance
+    ));
+  };
+
+  const handleRunAgent = async () => {
+    const instance = activeInstance;
+
+    if (!instance.config.country || !instance.config.domain) {
+      toast({
+        title: "Configuration Required",
+        description: "Please select both country and business domain before running the agent.",
+        variant: "destructive"
+      });
+      return;
     }
-    groupedJobs[group].push(job);
-  });
 
-  const renderSkillBadges = (skills: string[], color: string, maxShow: number = 3) => {
-    const visibleSkills = skills.slice(0, maxShow);
-    const remainingCount = skills.length - maxShow;
+    const expectedJobCount = 1000;
+    const formatCount = (count: number) => count.toLocaleString();
 
-    return (
-      <div className="flex flex-wrap gap-1">
-        {visibleSkills.map((skill, index) => (
-          <Badge key={index} className={`text-xs ${color}`}>
-            {skill}
-          </Badge>
-        ))}
-        {remainingCount > 0 && (
-          <Badge variant="outline" className="text-xs">
-            +{remainingCount}
-          </Badge>
-        )}
-      </div>
-    );
+    updateInstance(instance.id, {
+      isRunning: true,
+      currentStatus: 'Initializing Agent for data extraction...'
+    });
+
+    toast({
+      title: "Agent Started",
+      description: `Extracting job data from ${instance.config.country} - ${instance.config.domain}`,
+    });
+
+    setTimeout(() => updateInstance(instance.id, { currentStatus: `Connecting to 15 job portals simultaneously...` }), 200);
+    setTimeout(() => updateInstance(instance.id, { currentStatus: `Scanning ${formatCount(Math.floor(expectedJobCount * 0.2))} job listings...` }), 400);
+    setTimeout(() => updateInstance(instance.id, { currentStatus: `Extracting descriptions from ${formatCount(Math.floor(expectedJobCount * 0.4))} postings...` }), 600);
+    setTimeout(() => updateInstance(instance.id, { currentStatus: `Analyzing data for ${formatCount(Math.floor(expectedJobCount * 0.6))} positions...` }), 800);
+    setTimeout(() => updateInstance(instance.id, { currentStatus: `Identifying companies for ${formatCount(Math.floor(expectedJobCount * 0.8))} jobs...` }), 1000);
+    setTimeout(() => updateInstance(instance.id, { currentStatus: `Running clustering on ${formatCount(expectedJobCount)} records...` }), 1200);
+
+    setTimeout(() => {
+      const generatedData = generateMockJobData(instance.config.country, instance.config.domain, false);
+      const clustered = clusterJobs(generatedData).slice(0, 1000);
+      updateInstance(instance.id, {
+        jobData: generatedData,
+        clusteredJobs: clustered,
+        isRunning: false,
+        currentStatus: ''
+      });
+      toast({
+        title: "Data Extraction Complete",
+        description: `Extracted ${clustered.length.toLocaleString()} job listings in ${new Set(clustered.map(j => j.jobGroup)).size} clusters.`,
+      });
+    }, 1500);
+  };
+
+  const handleExportData = () => {
+    if (activeInstance.clusteredJobs.length === 0) {
+      toast({
+        title: "No Data to Export",
+        description: "Please run the agent first to generate data for export.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const headers = [
+      "Job Group", "Standard Skills", "Job Title", "Company", "Company Type",
+      "Location", "Experience", "Key Skills", "Soft Skills", "Tools & Tech",
+      "Certifications", "Job Type", "Source", "Date Posted", "Business Domain",
+      "Working Function", "Experience Level", "Education Required", "Responsibilities"
+    ];
+
+    const groupedJobs: { [key: string]: JobData[] } = {};
+    activeInstance.clusteredJobs.forEach(job => {
+      const group = job.jobGroup || 'Uncategorized';
+      if (!groupedJobs[group]) groupedJobs[group] = [];
+      groupedJobs[group].push(job);
+    });
+
+    const csvRows = ['sep=,'];
+    Object.entries(groupedJobs).forEach(([groupName, jobs]) => {
+      jobs.forEach((job, index) => {
+        const row = [
+          index === 0 ? groupName : '',
+          index === 0 ? (job.standardSkills || []).join('; ') : '',
+          job.jobTitle,
+          job.companyName,
+          job.companyType || '',
+          job.jobLocation,
+          `${job.experienceYears} (${job.experienceLevel})`,
+          job.keySkills.join('; '),
+          job.softSkills.join('; '),
+          job.toolsTechnologies.join('; '),
+          job.certifications.join('; '),
+          job.jobType,
+          job.jobPortalSource,
+          job.datePosted,
+          job.businessDomain,
+          job.workingFunction,
+          job.experienceLevel,
+          job.educationRequired,
+          job.responsibilities.join('; ')
+        ];
+        csvRows.push(row.map(cell => `"${cell}"`).join(','));
+      });
+    });
+
+    const blob = new Blob([headers.join(',') + '\n' + csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `jobintel_${activeInstance.config.country}_${activeInstance.config.domain.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+    toast({ title: "Excel Export Complete", description: `Exported ${activeInstance.clusteredJobs.length.toLocaleString()} job records.` });
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>JobIntel Market Intelligence Data</CardTitle>
-      </CardHeader>
-      <CardContent>
-        {/* Table header - fixed, no horizontal scroll */}
-        <div className="overflow-hidden">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="min-w-[120px]">Job Group</TableHead>
-                <TableHead className="min-w-[180px]">Standard Skills</TableHead>
-                <TableHead className="min-w-[200px]">Job Title</TableHead>
-                <TableHead className="min-w-[150px]">Company</TableHead>
-                <TableHead className="min-w-[100px]">Company Type</TableHead>
-                <TableHead className="min-w-[120px]">Location</TableHead>
-                <TableHead className="min-w-[100px]">Experience</TableHead>
-                <TableHead className="min-w-[200px]">Key Skills</TableHead>
-                <TableHead className="min-w-[150px]">Soft Skills</TableHead>
-                <TableHead className="min-w-[200px]">Tools & Tech</TableHead>
-                <TableHead className="min-w-[150px]">Certifications</TableHead>
-                <TableHead className="min-w-[100px]">Job Type</TableHead>
-                <TableHead className="min-w-[100px]">Source</TableHead>
-                <TableHead className="min-w-[80px]">Action</TableHead>
-              </TableRow>
-            </TableHeader>
-          </Table>
-        </div>
-
-        {/* Scrollable Table Body with horizontal and vertical scroll */}
-        <div className="overflow-x-auto max-h-[60vh]" style={{ overflowY: 'auto' }}>
-          <Table>
-            <TableBody>
-              {Object.entries(groupedJobs).map(([groupName, jobs]) =>
-                jobs.map((job, jobIndex) => (
-                  <TableRow key={`${groupName}-${jobIndex}`} className="hover:bg-gray-50">
-                    {jobIndex === 0 && (
-                      <TableCell rowSpan={jobs.length} className="border-r border-gray-200 bg-gray-50/50">
-                        <Badge variant="outline" className="bg-indigo-50 text-indigo-700 border-indigo-200 font-medium">
-                          {groupName}
-                        </Badge>
-                      </TableCell>
-                    )}
-                    {jobIndex === 0 && (
-                      <TableCell rowSpan={jobs.length} className="border-r border-gray-200 bg-blue-50/50">
-                        {renderSkillBadges(job.standardSkills || [], 'bg-blue-100 text-blue-800', 4)}
-                      </TableCell>
-                    )}
-                    <TableCell>
-                      <div>
-                        <div className="font-medium text-blue-600">{job.jobTitle}</div>
-                        <div className="text-xs text-gray-500">{job.datePosted}</div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div>
-                        <div className="font-medium">{job.companyName}</div>
-                        <div className="text-xs text-gray-500">{job.businessDomain}</div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200">
-                        {job.companyType}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>{job.jobLocation}</TableCell>
-                    <TableCell>
-                      <div className="space-y-1">
-                        <Badge variant="outline" className="text-xs">
-                          {job.experienceYears}
-                        </Badge>
-                        <div className="text-xs text-gray-500">{job.experienceLevel}</div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      {renderSkillBadges(job.keySkills, 'bg-green-100 text-green-800')}
-                    </TableCell>
-                    <TableCell>
-                      {renderSkillBadges(job.softSkills, 'bg-pink-100 text-pink-800')}
-                    </TableCell>
-                    <TableCell>
-                      {renderSkillBadges(job.toolsTechnologies, 'bg-orange-100 text-orange-800')}
-                    </TableCell>
-                    <TableCell>
-                      {renderSkillBadges(job.certifications, 'border-blue-200 text-blue-700', 2)}
-                    </TableCell>
-                    <TableCell>
-                      <Badge className="bg-blue-100 text-blue-800">{job.jobType}</Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge className="bg-purple-100 text-purple-800">{job.jobPortalSource}</Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Button variant="outline" size="sm" className="h-7">
-                        <ExternalLink className="w-3 h-3" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      {/* Header */}
+      <div className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
+                <Database className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900">JobIntel Agent</h1>
+                <p className="text-sm text-gray-600">Job data extraction and market intelligence</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-4">
+              {activeInstance.clusteredJobs.length > 0 && (
+                <Button onClick={handleExportData} className="bg-green-600 hover:bg-green-700">
+                  <Download className="w-4 h-4 mr-2" />
+                  Export Excel
+                </Button>
               )}
-            </TableBody>
-          </Table>
+            </div>
+          </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+
+      {/* Main Content */}
+      <div className="container mx-auto px-6 py-8">
+        <div className="grid lg:grid-cols-4 gap-6">
+          {/* Left Panel */}
+          <div className="lg:col-span-1">
+            <AgentConfigPanel
+              config={activeInstance.config}
+              setConfig={(newConfig) => updateInstance(activeInstance.id, { config: newConfig })}
+              onRunAgent={handleRunAgent}
+              isRunning={activeInstance.isRunning}
+              currentStatus={activeInstance.currentStatus}
+            />
+          </div>
+
+          {/* Right Panel with scroll + bottom bar */}
+          <div className="lg:col-span-3 relative h-[80vh] flex flex-col border rounded-lg overflow-hidden bg-white shadow">
+            <div ref={rightPaneRef} className="flex-1 overflow-y-auto overflow-x-auto p-4">
+              <div className="space-y-6 min-w-[900px]">
+                <AnalyticsMetrics jobData={activeInstance.clusteredJobs} />
+                <JobDataTable jobData={activeInstance.clusteredJobs} />
+              </div>
+            </div>
+            {/* Bottom bar */}
+            <div className="flex justify-end items-center border-t p-3 bg-white sticky bottom-0">
+              <button
+                onClick={() => {
+                  if (rightPaneRef.current) {
+                    rightPaneRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+                  }
+                }}
+                className="text-sm text-blue-600 hover:underline flex items-center"
+              >
+                <ArrowUp className="w-4 h-4 mr-1" />
+                Back to Top
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
-export default JobDataTable;
+export default Index;
