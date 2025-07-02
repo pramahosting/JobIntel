@@ -53,7 +53,7 @@ const Index = () => {
       return;
     }
 
-    const expectedJobCount = 1000; // 🔹 Limit job count for performance
+    const expectedJobCount = 1000;
     const formatCount = (count: number) => count.toLocaleString();
 
     updateInstance(instance.id, { 
@@ -186,9 +186,22 @@ const Index = () => {
               currentStatus={activeInstance.currentStatus}
             />
           </div>
-          <div className="lg:col-span-3 space-y-6">
-            <AnalyticsMetrics jobData={activeInstance.clusteredJobs} />
-            <JobDataTable jobData={activeInstance.clusteredJobs} />
+          <div className="lg:col-span-3 flex flex-col h-[calc(100vh-150px)] border rounded-md overflow-hidden bg-white shadow">
+            <div className="flex-1 overflow-y-auto p-4">
+              <div className="space-y-6">
+                <AnalyticsMetrics jobData={activeInstance.clusteredJobs} />
+                <JobDataTable jobData={activeInstance.clusteredJobs} />
+              </div>
+            </div>
+            <div className="border-t bg-gray-100 px-4 py-2 text-sm text-gray-700 flex justify-between items-center">
+              <span>{activeInstance.clusteredJobs.length.toLocaleString()} job listings found</span>
+              <button
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                className="text-blue-600 hover:underline"
+              >
+                Back to Top
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -197,3 +210,4 @@ const Index = () => {
 };
 
 export default Index;
+
