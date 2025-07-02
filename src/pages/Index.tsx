@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Database, Download, ArrowUp } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -21,8 +21,6 @@ interface AgentInstance {
 
 const Index = () => {
   const { toast } = useToast();
-  const rightPaneRef = useRef<HTMLDivElement>(null);
-
   const [agentInstances, setAgentInstances] = useState<AgentInstance[]>([
     {
       id: 'main',
@@ -35,10 +33,13 @@ const Index = () => {
   ]);
   const [activeInstanceId, setActiveInstanceId] = useState('main');
 
+  // Reference to the right pane scroll container
+  const rightPaneRef = useRef<HTMLDivElement>(null);
+
   const activeInstance = agentInstances.find(instance => instance.id === activeInstanceId) || agentInstances[0];
 
   const updateInstance = (id: string, updates: Partial<AgentInstance>) => {
-    setAgentInstances(prev => prev.map(instance =>
+    setAgentInstances(prev => prev.map(instance => 
       instance.id === id ? { ...instance, ...updates } : instance
     ));
   };
@@ -55,12 +56,12 @@ const Index = () => {
       return;
     }
 
-    const expectedJobCount = 1000;
+    const expectedJobCount = 1000; // Limit job count for performance
     const formatCount = (count: number) => count.toLocaleString();
 
-    updateInstance(instance.id, {
-      isRunning: true,
-      currentStatus: 'Initializing Agent for data extraction...'
+    updateInstance(instance.id, { 
+      isRunning: true, 
+      currentStatus: 'Initializing Agent for data extraction...' 
     });
 
     toast({
@@ -102,8 +103,8 @@ const Index = () => {
     }
 
     const headers = [
-      "Job Group", "Standard Skills", "Job Title", "Company", "Company Type",
-      "Location", "Experience", "Key Skills", "Soft Skills", "Tools & Tech",
+      "Job Group", "Standard Skills", "Job Title", "Company", "Company Type", 
+      "Location", "Experience", "Key Skills", "Soft Skills", "Tools & Tech", 
       "Certifications", "Job Type", "Source", "Date Posted", "Business Domain",
       "Working Function", "Experience Level", "Education Required", "Responsibilities"
     ];
@@ -153,7 +154,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      {/* Header */}
       <div className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
@@ -178,7 +178,6 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="container mx-auto px-6 py-8">
         <div className="grid lg:grid-cols-4 gap-6">
           {/* Left Panel */}
@@ -194,14 +193,21 @@ const Index = () => {
 
           {/* Right Panel with scroll + bottom bar */}
           <div className="lg:col-span-3 relative h-[80vh] flex flex-col border rounded-lg overflow-hidden bg-white shadow">
-            <div ref={rightPaneRef} className="flex-1 overflow-y-auto overflow-x-auto p-4">
+
+            {/* Scrollable content container */}
+            <div 
+              ref={rightPaneRef} 
+              className="flex-1 overflow-y-auto overflow-x-auto p-4 min-w-[900px]"
+              style={{ paddingBottom: '3rem' }} // extra bottom padding so content is not hidden behind bottom bar
+            >
               <div className="space-y-6 min-w-[900px]">
                 <AnalyticsMetrics jobData={activeInstance.clusteredJobs} />
                 <JobDataTable jobData={activeInstance.clusteredJobs} />
               </div>
             </div>
-            {/* Bottom bar */}
-            <div className="flex justify-end items-center border-t p-3 bg-white sticky bottom-0">
+
+            {/* Bottom bar: Back to Top button */}
+            <div className="flex justify-end items-center border-t p-3 bg-white sticky bottom-0 z-10">
               <button
                 onClick={() => {
                   if (rightPaneRef.current) {
