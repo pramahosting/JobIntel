@@ -277,3 +277,4 @@ const JobResults: React.FC<JobResultsProps> = ({ searchParams, onExport }) => {
 };
 
 export default JobResults;
+
