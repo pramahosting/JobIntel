@@ -216,7 +216,11 @@ const skillsDatabase = {
     'Software Development', 'Cloud Computing', 'Data Science', 'Machine Learning', 'DevOps',
     'Cybersecurity', 'API Development', 'Database Management', 'System Architecture', 'Agile Methodology'
   ],
-  
+  'Aviation Infrastructure': [
+    'Airport Operations', 'Ground Handling', 'Airspace Management', 'Aviation Safety',
+    'Regulatory Compliance (DGCA/ICAO)', 'Infrastructure Planning', 'Air Traffic Control Systems',
+    'Runway Maintenance', 'Passenger Experience Management', 'Terminal Management'
+  ]
 };
 
 const jobTitlesDatabase = {
@@ -480,11 +484,14 @@ export function clusterJobs(jobs: JobData[]): JobData[] {
 }
 
 // Enhanced data generation for limitless extraction
-export function generateMockJobData(country: string, domain: string, limitlessMode: boolean = false): JobData[] {
-  // Limitless mode generates significantly more jobs (15,000-50,000)
-  const expectedJobCount = 1000; // 🧩 Match backend limit for accurate progress UI
-
-  const jobs: JobData[] = [];
+  export function generateMockJobData(
+    country: string,
+    domain: string,
+    limitlessMode: boolean = false,
+    customLimit: number = 1000
+  ): JobData[] {
+    const maxJobs = 1000;
+    const jobs: JobData[] = [];
   
   // Get country and domain specific data
   const countryData = companyData[country as keyof typeof companyData];
