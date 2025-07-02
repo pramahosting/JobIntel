@@ -98,7 +98,6 @@ const companyData = {
         'Computershare': 'Technology Services',
         'NextDC': 'Data Centers'
       }
-    },
     'Aviation Infrastructure': {
       companies: [
         'Sydney Airport', 'Melbourne Airport', 'Brisbane Airport Corporation',
@@ -183,7 +182,7 @@ const companyData = {
         'Salesforce': 'Software',
         'Oracle': 'Software'
       }
-    },
+    }
     'Aviation Infrastructure': {
       companies: [
         'Federal Aviation Administration (FAA)', 'Port Authority of NY and NJ',
@@ -199,11 +198,10 @@ const companyData = {
         'Denver International Airport': 'Airport Operator',
         'Chicago O\'Hare International Airport': 'Airport Operator',
         'Atlanta Hartsfield-Jackson International Airport': 'Airport Operator'
-      }
+    }
     }
   }
 };
-
 
 const locationData = {
   'Australia': ['Sydney, NSW', 'Melbourne, VIC', 'Brisbane, QLD', 'Perth, WA', 'Adelaide, SA', 'Canberra, ACT'],
