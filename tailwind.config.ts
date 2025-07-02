@@ -61,8 +61,14 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
-			},
+				},
+				height: {
+    					'scrollbar-panel': '500px',
+  				},
+  				minWidth: {
+    					'table-fixed': '1200px'
+  				},
+			
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
