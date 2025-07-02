@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Database, Download } from 'lucide-react';
+import { Database, Download, ArrowUp } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import AgentConfigPanel from '@/components/AgentConfigPanel';
 import AnalyticsMetrics from '@/components/AnalyticsMetrics';
@@ -21,6 +21,8 @@ interface AgentInstance {
 
 const Index = () => {
   const { toast } = useToast();
+  const rightPaneRef = useRef<HTMLDivElement>(null);
+
   const [agentInstances, setAgentInstances] = useState<AgentInstance[]>([
     {
       id: 'main',
@@ -36,7 +38,7 @@ const Index = () => {
   const activeInstance = agentInstances.find(instance => instance.id === activeInstanceId) || agentInstances[0];
 
   const updateInstance = (id: string, updates: Partial<AgentInstance>) => {
-    setAgentInstances(prev => prev.map(instance => 
+    setAgentInstances(prev => prev.map(instance =>
       instance.id === id ? { ...instance, ...updates } : instance
     ));
   };
@@ -56,9 +58,9 @@ const Index = () => {
     const expectedJobCount = 1000;
     const formatCount = (count: number) => count.toLocaleString();
 
-    updateInstance(instance.id, { 
-      isRunning: true, 
-      currentStatus: 'Initializing Agent for data extraction...' 
+    updateInstance(instance.id, {
+      isRunning: true,
+      currentStatus: 'Initializing Agent for data extraction...'
     });
 
     toast({
@@ -100,8 +102,8 @@ const Index = () => {
     }
 
     const headers = [
-      "Job Group", "Standard Skills", "Job Title", "Company", "Company Type", 
-      "Location", "Experience", "Key Skills", "Soft Skills", "Tools & Tech", 
+      "Job Group", "Standard Skills", "Job Title", "Company", "Company Type",
+      "Location", "Experience", "Key Skills", "Soft Skills", "Tools & Tech",
       "Certifications", "Job Type", "Source", "Date Posted", "Business Domain",
       "Working Function", "Experience Level", "Education Required", "Responsibilities"
     ];
@@ -151,6 +153,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      {/* Header */}
       <div className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
@@ -175,8 +178,10 @@ const Index = () => {
         </div>
       </div>
 
+      {/* Main Content */}
       <div className="container mx-auto px-6 py-8">
         <div className="grid lg:grid-cols-4 gap-6">
+          {/* Left Panel */}
           <div className="lg:col-span-1">
             <AgentConfigPanel
               config={activeInstance.config}
@@ -186,19 +191,26 @@ const Index = () => {
               currentStatus={activeInstance.currentStatus}
             />
           </div>
-          <div className="lg:col-span-3 flex flex-col h-[calc(100vh-150px)] border rounded-md overflow-hidden bg-white shadow">
-            <div className="flex-1 overflow-y-auto p-4">
-              <div className="space-y-6">
+
+          {/* Right Panel with scroll + bottom bar */}
+          <div className="lg:col-span-3 relative h-[80vh] flex flex-col border rounded-lg overflow-hidden bg-white shadow">
+            <div ref={rightPaneRef} className="flex-1 overflow-y-auto overflow-x-auto p-4">
+              <div className="space-y-6 min-w-[900px]">
                 <AnalyticsMetrics jobData={activeInstance.clusteredJobs} />
                 <JobDataTable jobData={activeInstance.clusteredJobs} />
               </div>
             </div>
-            <div className="border-t bg-gray-100 px-4 py-2 text-sm text-gray-700 flex justify-between items-center">
-              <span>{activeInstance.clusteredJobs.length.toLocaleString()} job listings found</span>
+            {/* Bottom bar */}
+            <div className="flex justify-end items-center border-t p-3 bg-white sticky bottom-0">
               <button
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                className="text-blue-600 hover:underline"
+                onClick={() => {
+                  if (rightPaneRef.current) {
+                    rightPaneRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+                  }
+                }}
+                className="text-sm text-blue-600 hover:underline flex items-center"
               >
+                <ArrowUp className="w-4 h-4 mr-1" />
                 Back to Top
               </button>
             </div>
@@ -210,4 +222,3 @@ const Index = () => {
 };
 
 export default Index;
-
