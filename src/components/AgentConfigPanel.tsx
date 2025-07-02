@@ -33,7 +33,7 @@ const AgentConfigPanel: React.FC<AgentConfigPanelProps> = ({
 
   const domains = [
     "Banking & Financial Services", "Government", "Manufacturing", "Mining", 
-    "Healthcare", "Retail", "Technology", "Energy & Utilities", "Aviation Infrastructure",
+    "Healthcare", "Retail", "Technology", "Energy & Utilities",
     "Telecommunications", "Education", "Real Estate", "Consulting", "All Domains"
   ];
   
