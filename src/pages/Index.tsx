@@ -192,15 +192,24 @@ const Index = () => {
             />
           </div>
 
-          {/* Right Panel with scroll + bottom bar */}
+          {/* Right Panel */}
           <div className="lg:col-span-3 relative h-[80vh] flex flex-col border rounded-lg overflow-hidden bg-white shadow">
-            <div ref={rightPaneRef} className="flex-1 overflow-y-auto overflow-x-auto p-4">
-              <div className="space-y-6 min-w-[900px]">
+            {/* Scrollable content */}
+            <div ref={rightPaneRef} className="flex-1 overflow-y-auto p-4">
+              {/* Top horizontal scroll area */}
+              <div className="overflow-x-auto pb-2 border-b border-gray-200 mb-2">
+                <div className="h-2.5 bg-gray-100 w-full overflow-x-auto">
+                  <div className="h-0.5 w-[2000px]"></div>
+                </div>
+              </div>
+
+              <div className="overflow-x-auto min-w-[900px] space-y-6">
                 <AnalyticsMetrics jobData={activeInstance.clusteredJobs} />
                 <JobDataTable jobData={activeInstance.clusteredJobs} />
               </div>
             </div>
-            {/* Bottom bar */}
+
+            {/* Bottom Bar with Back to Top */}
             <div className="flex justify-end items-center border-t p-3 bg-white sticky bottom-0">
               <button
                 onClick={() => {
@@ -222,3 +231,4 @@ const Index = () => {
 };
 
 export default Index;
+
