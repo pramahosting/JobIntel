@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
@@ -11,31 +11,6 @@ interface JobDataTableProps {
 }
 
 const JobDataTable: React.FC<JobDataTableProps> = ({ jobData }) => {
-  const topScrollRef = useRef<HTMLDivElement>(null);
-  const bottomScrollRef = useRef<HTMLDivElement>(null);
-
-  // Adjust this width to match your table's total width (sum of min-width of all columns)
-  const tableWidth = 2300; 
-
-  // Synchronize scrolling between top and bottom scrollbars
-  const handleTopScroll = () => {
-    if (bottomScrollRef.current && topScrollRef.current) {
-      bottomScrollRef.current.scrollLeft = topScrollRef.current.scrollLeft;
-    }
-  };
-
-  const handleBottomScroll = () => {
-    if (topScrollRef.current && bottomScrollRef.current) {
-      topScrollRef.current.scrollLeft = bottomScrollRef.current.scrollLeft;
-    }
-  };
-
-  useEffect(() => {
-    if (topScrollRef.current && bottomScrollRef.current) {
-      topScrollRef.current.scrollLeft = bottomScrollRef.current.scrollLeft;
-    }
-  }, []);
-
   if (jobData.length === 0) {
     return (
       <Card>
@@ -93,21 +68,7 @@ const JobDataTable: React.FC<JobDataTableProps> = ({ jobData }) => {
         <CardTitle>JobIntel Market Intelligence Data</CardTitle>
       </CardHeader>
       <CardContent>
-        {/* Your statistics or analytics above table here, if any */}
-        {/* Example: <AnalyticsMetrics jobData={jobData} /> */}
-
-        {/* Top horizontal scrollbar */}
-        <div
-          ref={topScrollRef}
-          className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 h-4 mb-1"
-          style={{ overflowY: 'hidden' }}
-          onScroll={handleTopScroll}
-        >
-          {/* Dummy div with exact width of the table */}
-          <div style={{ width: tableWidth, height: 1 }} />
-        </div>
-
-        {/* Table Header fixed */}
+        {/* Table header - fixed, no horizontal scroll */}
         <div className="overflow-hidden">
           <Table>
             <TableHeader>
@@ -131,13 +92,8 @@ const JobDataTable: React.FC<JobDataTableProps> = ({ jobData }) => {
           </Table>
         </div>
 
-        {/* Scrollable Table Body */}
-        <div
-          ref={bottomScrollRef}
-          className="overflow-x-auto max-h-[60vh]"
-          onScroll={handleBottomScroll}
-          style={{ overflowY: 'auto' }}
-        >
+        {/* Scrollable Table Body with horizontal and vertical scroll */}
+        <div className="overflow-x-auto max-h-[60vh]" style={{ overflowY: 'auto' }}>
           <Table>
             <TableBody>
               {Object.entries(groupedJobs).map(([groupName, jobs]) =>
@@ -216,4 +172,3 @@ const JobDataTable: React.FC<JobDataTableProps> = ({ jobData }) => {
 };
 
 export default JobDataTable;
-
