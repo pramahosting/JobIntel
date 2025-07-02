@@ -116,6 +116,7 @@ const companyData = {
       }
     }
   },
+
   'USA': {
     'Government': {
       companies: [
@@ -199,6 +200,81 @@ const companyData = {
         'Denver International Airport': 'Airport Operator',
         'Chicago O\'Hare International Airport': 'Airport Operator',
         'Atlanta Hartsfield-Jackson International Airport': 'Airport Operator'
+      }
+    }
+  },
+
+  'India': {
+    'Banking & Financial Services': {
+      companies: [
+        'State Bank of India', 'HDFC Bank', 'ICICI Bank', 'Axis Bank',
+        'Kotak Mahindra Bank', 'IDFC First Bank', 'Yes Bank', 'Punjab National Bank',
+        'Bank of Baroda', 'IndusInd Bank'
+      ],
+      types: {
+        'State Bank of India': 'Public Sector Bank',
+        'HDFC Bank': 'Private Bank',
+        'ICICI Bank': 'Private Bank',
+        'Axis Bank': 'Private Bank',
+        'Kotak Mahindra Bank': 'Private Bank',
+        'IDFC First Bank': 'Private Bank',
+        'Yes Bank': 'Private Bank',
+        'Punjab National Bank': 'Public Sector Bank',
+        'Bank of Baroda': 'Public Sector Bank',
+        'IndusInd Bank': 'Private Bank'
+      }
+    },
+    'Healthcare': {
+      companies: [
+        'Apollo Hospitals', 'Fortis Healthcare', 'Max Healthcare', 'Manipal Hospitals',
+        'Narayana Health', 'Medanta', 'AIIMS', 'Sun Pharma', 'Dr. Reddy\'s Laboratories', 'Cipla'
+      ],
+      types: {
+        'Apollo Hospitals': 'Private Hospital Chain',
+        'Fortis Healthcare': 'Private Hospital Chain',
+        'Max Healthcare': 'Private Hospital Chain',
+        'Manipal Hospitals': 'Private Hospital Chain',
+        'Narayana Health': 'Private Hospital Chain',
+        'Medanta': 'Private Hospital',
+        'AIIMS': 'Public Hospital & Research',
+        'Sun Pharma': 'Pharmaceuticals',
+        'Dr. Reddy\'s Laboratories': 'Pharmaceuticals',
+        'Cipla': 'Pharmaceuticals'
+      }
+    },
+    'Technology': {
+      companies: [
+        'Infosys', 'Tata Consultancy Services (TCS)', 'Wipro', 'HCL Technologies',
+        'Tech Mahindra', 'L&T Infotech', 'Zoho', 'Freshworks', 'Persistent Systems', 'Mindtree'
+      ],
+      types: {
+        'Infosys': 'IT Services',
+        'Tata Consultancy Services (TCS)': 'IT Services',
+        'Wipro': 'IT Services',
+        'HCL Technologies': 'IT Services',
+        'Tech Mahindra': 'IT Services',
+        'L&T Infotech': 'IT Services',
+        'Zoho': 'Software Product',
+        'Freshworks': 'Software Product',
+        'Persistent Systems': 'IT Services',
+        'Mindtree': 'IT Services'
+      }
+    },
+    'Aviation Infrastructure': {
+      companies: [
+        'GMR Group', 'GVK Industries', 'Airports Authority of India (AAI)',
+        'BIAL (Bangalore International Airport Limited)', 'Mumbai International Airport Ltd (MIAL)',
+        'Delhi International Airport Limited (DIAL)', 'Adani Airport Holdings', 'Hyderabad International Airport Ltd (HIAL)'
+      ],
+      types: {
+        'GMR Group': 'Infrastructure & Airport Operator',
+        'GVK Industries': 'Infrastructure & Airport Operator',
+        'Airports Authority of India (AAI)': 'Government',
+        'BIAL (Bangalore International Airport Limited)': 'Airport Operations',
+        'Mumbai International Airport Ltd (MIAL)': 'Airport Operations',
+        'Delhi International Airport Limited (DIAL)': 'Airport Operations',
+        'Adani Airport Holdings': 'Private Infrastructure',
+        'Hyderabad International Airport Ltd (HIAL)': 'Airport Operations'
       }
     }
   }
