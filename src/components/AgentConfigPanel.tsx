@@ -36,7 +36,7 @@ const AgentConfigPanel: React.FC<AgentConfigPanelProps> = ({
     "Healthcare", "Retail", "Technology", "Energy & Utilities", "Aviation Infrastructure",
     "Telecommunications", "Education", "Real Estate", "Consulting", "All Domains"
   ];
-
+  
   const updateConfig = (key: keyof AgentConfig, value: string) => {
     setConfig(prev => ({ ...prev, [key]: value }));
   };
