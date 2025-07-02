@@ -23,7 +23,7 @@ export interface JobData {
 }
 
 // Corrected companyData object
-export const companyData = {
+const companyData = {
   'Australia': {
     'Banking & Financial Services': {
       companies: [
