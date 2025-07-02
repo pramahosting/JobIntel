@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
@@ -12,6 +11,17 @@ interface JobDataTableProps {
 }
 
 const JobDataTable: React.FC<JobDataTableProps> = ({ jobData }) => {
+  const topScrollRef = useRef<HTMLDivElement>(null);
+  const bottomScrollRef = useRef<HTMLDivElement>(null);
+
+  const syncScroll = (source: 'top' | 'bottom') => {
+    if (topScrollRef.current && bottomScrollRef.current) {
+      const sourceEl = source === 'top' ? topScrollRef.current : bottomScrollRef.current;
+      const targetEl = source === 'top' ? bottomScrollRef.current : topScrollRef.current;
+      targetEl.scrollLeft = sourceEl.scrollLeft;
+    }
+  };
+
   if (jobData.length === 0) {
     return (
       <Card>
@@ -25,7 +35,6 @@ const JobDataTable: React.FC<JobDataTableProps> = ({ jobData }) => {
     );
   }
 
-  // Sort jobs by job group to ensure jobs from same group appear together
   const sortedJobData = [...jobData].sort((a, b) => {
     if (a.jobGroup && b.jobGroup) {
       return a.jobGroup.localeCompare(b.jobGroup);
@@ -33,7 +42,6 @@ const JobDataTable: React.FC<JobDataTableProps> = ({ jobData }) => {
     return 0;
   });
 
-  // Group jobs by jobGroup for cell merging
   const groupedJobs: { [key: string]: JobData[] } = {};
   sortedJobData.forEach(job => {
     const group = job.jobGroup || 'Uncategorized';
@@ -50,14 +58,10 @@ const JobDataTable: React.FC<JobDataTableProps> = ({ jobData }) => {
     return (
       <div className="flex flex-wrap gap-1">
         {visibleSkills.map((skill, index) => (
-          <Badge key={index} className={`text-xs ${color}`}>
-            {skill}
-          </Badge>
+          <Badge key={index} className={`text-xs ${color}`}>{skill}</Badge>
         ))}
         {remainingCount > 0 && (
-          <Badge variant="outline" className="text-xs">
-            +{remainingCount}
-          </Badge>
+          <Badge variant="outline" className="text-xs">+{remainingCount}</Badge>
         )}
       </div>
     );
@@ -68,9 +72,23 @@ const JobDataTable: React.FC<JobDataTableProps> = ({ jobData }) => {
       <CardHeader>
         <CardTitle>JobIntel Market Intelligence Data</CardTitle>
       </CardHeader>
+
+      {/* Top Scrollbar */}
+      <div
+        ref={topScrollRef}
+        onScroll={() => syncScroll('top')}
+        className="overflow-x-auto h-3 mb-1"
+      >
+        <div className="w-[2000px] h-1" />
+      </div>
+
       <CardContent>
-        <div className="overflow-x-auto">
-          <Table>
+        <div
+          ref={bottomScrollRef}
+          onScroll={() => syncScroll('bottom')}
+          className="overflow-x-auto"
+        >
+          <Table className="min-w-[2000px]">
             <TableHeader>
               <TableRow>
                 <TableHead className="min-w-[120px]">Job Group</TableHead>
@@ -90,7 +108,7 @@ const JobDataTable: React.FC<JobDataTableProps> = ({ jobData }) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {Object.entries(groupedJobs).map(([groupName, jobs]) => 
+              {Object.entries(groupedJobs).map(([groupName, jobs]) =>
                 jobs.map((job, jobIndex) => (
                   <TableRow key={`${groupName}-${jobIndex}`} className="hover:bg-gray-50">
                     {jobIndex === 0 && (
@@ -125,33 +143,19 @@ const JobDataTable: React.FC<JobDataTableProps> = ({ jobData }) => {
                     <TableCell>{job.jobLocation}</TableCell>
                     <TableCell>
                       <div className="space-y-1">
-                        <Badge variant="outline" className="text-xs">
-                          {job.experienceYears}
-                        </Badge>
+                        <Badge variant="outline" className="text-xs">{job.experienceYears}</Badge>
                         <div className="text-xs text-gray-500">{job.experienceLevel}</div>
                       </div>
                     </TableCell>
+                    <TableCell>{renderSkillBadges(job.keySkills, 'bg-green-100 text-green-800')}</TableCell>
+                    <TableCell>{renderSkillBadges(job.softSkills, 'bg-pink-100 text-pink-800')}</TableCell>
+                    <TableCell>{renderSkillBadges(job.toolsTechnologies, 'bg-orange-100 text-orange-800')}</TableCell>
+                    <TableCell>{renderSkillBadges(job.certifications, 'border-blue-200 text-blue-700', 2)}</TableCell>
                     <TableCell>
-                      {renderSkillBadges(job.keySkills, 'bg-green-100 text-green-800')}
+                      <Badge className="bg-blue-100 text-blue-800">{job.jobType}</Badge>
                     </TableCell>
                     <TableCell>
-                      {renderSkillBadges(job.softSkills, 'bg-pink-100 text-pink-800')}
-                    </TableCell>
-                    <TableCell>
-                      {renderSkillBadges(job.toolsTechnologies, 'bg-orange-100 text-orange-800')}
-                    </TableCell>
-                    <TableCell>
-                      {renderSkillBadges(job.certifications, 'border-blue-200 text-blue-700', 2)}
-                    </TableCell>
-                    <TableCell>
-                      <Badge className="bg-blue-100 text-blue-800">
-                        {job.jobType}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge className="bg-purple-100 text-purple-800">
-                        {job.jobPortalSource}
-                      </Badge>
+                      <Badge className="bg-purple-100 text-purple-800">{job.jobPortalSource}</Badge>
                     </TableCell>
                     <TableCell>
                       <Button variant="outline" size="sm" className="h-7">
@@ -170,3 +174,4 @@ const JobDataTable: React.FC<JobDataTableProps> = ({ jobData }) => {
 };
 
 export default JobDataTable;
+
