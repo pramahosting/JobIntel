@@ -503,94 +503,62 @@ export function clusterJobs(jobs: JobData[]): JobData[] {
 }
 
 // Enhanced data generation for limitless extraction
-  export function generateMockJobData(
-    country: string,
-    domain: string,
-    limitlessMode: boolean = false,
-    customLimit: number = 1000
-  ): JobData[] {
-    const maxJobs = 1000;
-    const jobs: JobData[] = [];
-  
-  // Get country and domain specific data
-  const countryData = companyData[country as keyof typeof companyData];
-  if (!countryData) {
-    console.warn(`No data available for country: ${country}. Using fallback data.`);
-    // Use USA data as fallback
-    const fallbackData = companyData['USA'];
-    const fallbackDomain = fallbackData[domain as keyof typeof fallbackData] || fallbackData['Technology'];
-    
-    return generateFallbackData(country, domain, jobCount, fallbackDomain);
-  }
-  
-  const domainData = countryData[domain as keyof typeof countryData];
-  if (!domainData) {
-    console.warn(`No data available for domain: ${domain} in country: ${country}. Using fallback data.`);
-    // Use first available domain as fallback
-    const availableDomains = Object.keys(countryData);
-    const fallbackDomain = countryData[availableDomains[0] as keyof typeof countryData];
-    
-    return generateFallbackData(country, domain, jobCount, fallbackDomain);
-  }
-  
+export function generateMockJobData(
+  country: string,
+  domain: string,
+  limitlessMode: boolean = false
+): JobData[] {
+  const maxJobs = 1000;
+  const jobs: JobData[] = [];
+
+  const countryData = companyData[country] || companyData['USA'];
+  const domainData = countryData[domain] || Object.values(countryData)[0];
+
   const relevantCompanies = domainData.companies;
   const companyTypes = domainData.types;
-  const relevantLocations = locationData[country as keyof typeof locationData] || ['Location Not Specified'];
-  const relevantSkills = skillsDatabase[domain as keyof typeof skillsDatabase] || [];
-  const relevantTools = toolsDatabase[domain as keyof typeof toolsDatabase] || [];
-  const relevantCerts = certificationsDatabase[domain as keyof typeof certificationsDatabase] || [];
-  const relevantFunctions = workingFunctionsDatabase[domain as keyof typeof workingFunctionsDatabase] || [];
-  const relevantTitles = jobTitlesDatabase[domain as keyof typeof jobTitlesDatabase] || [];
-  
-  const jobPortalSources = [
-    'LinkedIn', 'Indeed', 'Glassdoor', 'Company Career Portal', 'Monster', 'CareerBuilder',
-    'ZipRecruiter', 'AngelList', 'Stack Overflow Jobs', 'Dice', 'CyberSeek', 'FlexJobs'
-  ];
-  
-  console.log(`Generating ${jobCount.toLocaleString()} jobs for extraction...`);
-  
-  for (let i = 0; i < jobCount; i++) {
-    const jobTitle = relevantTitles[Math.floor(Math.random() * relevantTitles.length)];
+  const relevantLocations = locationData[country] || ['Location Not Specified'];
+  const relevantSkills = skillsDatabase[domain] || skillsDatabase['Technology'];
+  const relevantTools = toolsDatabase[domain] || toolsDatabase['Technology'];
+  const relevantCerts = certificationsDatabase[domain] || certificationsDatabase['Technology'];
+  const relevantFunctions = workingFunctionsDatabase[domain] || workingFunctionsDatabase['Technology'];
+  const relevantTitles = jobTitlesDatabase[domain] || jobTitlesDatabase['Technology'];
+
+  const jobPortals = ['LinkedIn', 'Indeed', 'Glassdoor', 'Company Career Portal', 'Monster'];
+  const experienceLevels = ['Junior', 'Mid-Level', 'Senior', 'Principal', 'Director'];
+  const experienceYears = ['1-2', '2-3', '3-5', '5-7', '7-10', '10+'];
+  const jobTypes = ['Full-time', 'Contract'];
+
+  for (let i = 0; i < maxJobs; i++) {
     const company = relevantCompanies[Math.floor(Math.random() * relevantCompanies.length)];
-    const location = relevantLocations[Math.floor(Math.random() * relevantLocations.length)];
-    const companyType = companyTypes[company as keyof typeof companyTypes] || 'Organization';
-    
+
     const job: JobData = {
-      jobTitle,
+      jobTitle: relevantTitles[Math.floor(Math.random() * relevantTitles.length)],
       businessDomain: domain,
       companyName: company,
-      companyType,
-      jobLocation: location,
-      jobType: Math.random() > 0.8 ? 'Contract' : 'Full-time',
+      companyType: companyTypes[company] || 'Organization',
+      jobLocation: relevantLocations[Math.floor(Math.random() * relevantLocations.length)],
+      jobType: jobTypes[Math.floor(Math.random() * jobTypes.length)],
       datePosted: getRandomDateWithinDays(30),
       responsibilities: [
-        'Analyze and assess risks across various portfolios',
-        'Ensure compliance with regulatory requirements',
-        'Develop and maintain frameworks and policies',
-        'Collaborate with cross-functional teams'
+        'Analyze business needs and propose solutions',
+        'Ensure regulatory compliance and quality standards',
+        'Collaborate with cross-functional teams to deliver results'
       ],
-      keySkills: getRandomItems(relevantSkills, Math.floor(Math.random() * 8) + 5),
-      softSkills: getRandomItems(softSkillsDatabase, Math.floor(Math.random() * 5) + 4),
-      toolsTechnologies: getRandomItems(relevantTools, Math.floor(Math.random() * 6) + 4),
-      experienceYears: ['1-2', '2-3', '3-5', '5-7', '7-10', '10+'][Math.floor(Math.random() * 6)],
-      experienceLevel: ['Junior', 'Mid-Level', 'Senior', 'Principal', 'Director'][Math.floor(Math.random() * 5)],
-      certifications: getRandomItems(relevantCerts, Math.floor(Math.random() * 3) + 1),
-      educationRequired: 'Bachelor\'s degree in relevant field, Master\'s preferred',
+      keySkills: getRandomItems(relevantSkills, 5),
+      softSkills: getRandomItems(softSkillsDatabase, 4),
+      toolsTechnologies: getRandomItems(relevantTools, 4),
+      experienceYears: experienceYears[Math.floor(Math.random() * experienceYears.length)],
+      experienceLevel: experienceLevels[Math.floor(Math.random() * experienceLevels.length)],
+      certifications: getRandomItems(relevantCerts, 2),
+      educationRequired: "Bachelor's degree in relevant field, Master's preferred",
       industryKeywords: getRandomItems(relevantSkills, 3),
       workingFunction: relevantFunctions[Math.floor(Math.random() * relevantFunctions.length)],
-      jobPortalSource: jobPortalSources[Math.floor(Math.random() * jobPortalSources.length)],
+      jobPortalSource: jobPortals[Math.floor(Math.random() * jobPortals.length)],
       sourceUrl: `https://example.com/job/${i + 1}`
     };
-    
+
     jobs.push(job);
-    
-    // Progress logging for large datasets
-    if (limitlessMode && i > 0 && i % 5000 === 0) {
-      console.log(`Generated ${i.toLocaleString()} / ${jobCount.toLocaleString()} jobs...`);
-    }
   }
-  
-  console.log(`Completed generation of ${jobCount.toLocaleString()} jobs for clustering...`);
   return jobs;
 }
 
