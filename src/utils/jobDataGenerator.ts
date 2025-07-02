@@ -623,6 +623,10 @@ export function generateMockJobData(
   const experienceYears = ['1-2', '2-3', '3-5', '5-7', '7-10', '10+'];
   const jobTypes = ['Full-time', 'Contract'];
 
+  console.log(`[JobGen] Country: ${country}, Domain: ${domain}`);
+  console.log(`[JobGen] Found domain key: ${domainKey}`);
+
+
   for (let i = 0; i < maxJobs; i++) {
     const company = relevantCompanies[Math.floor(Math.random() * relevantCompanies.length)];
     const job: JobData = {
