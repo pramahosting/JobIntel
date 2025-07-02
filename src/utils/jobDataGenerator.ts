@@ -245,6 +245,12 @@ const jobTitlesDatabase = {
     'Software Engineer', 'Data Scientist', 'DevOps Engineer', 'Product Manager',
     'Cloud Architect', 'Security Engineer', 'Full Stack Developer', 'System Administrator',
     'UX/UI Designer', 'Technical Lead', 'Platform Engineer', 'Machine Learning Engineer'
+  ],  
+  'Aviation Infrastructure': [
+    'Airport Operations Manager', 'Aviation Infrastructure Analyst', 'Regulatory Compliance Officer',
+    'Air Traffic Systems Engineer', 'Aviation Project Manager', 'Terminal Operations Lead',
+    'Ground Handling Supervisor', 'Infrastructure Planning Specialist', 'Airport Safety Officer',
+    'Airline Liaison Manager'
   ]
 };
 
@@ -269,6 +275,10 @@ const toolsDatabase = {
   'Technology': [
     'JavaScript', 'Python', 'Java', 'React', 'Node.js', 'AWS', 'Docker', 'Kubernetes',
     'Git', 'Jenkins', 'MongoDB', 'PostgreSQL'
+  ],
+  'Aviation Infrastructure': [
+    'AutoCAD', 'Primavera P6', 'ArcGIS', 'Simmod', 'AODB Systems', 'SCADA Systems',
+    'Airport Management Software', 'IATA Timatic', 'IBM Maximo', 'Power BI'
   ]
 };
 
@@ -288,6 +298,11 @@ const certificationsDatabase = {
   'Technology': [
     'AWS Certified Solutions Architect', 'Google Cloud Professional', 'Microsoft Azure Certification',
     'Certified Kubernetes Administrator', 'CompTIA Security+', 'Scrum Master Certification'
+  ],   
+  'Aviation Infrastructure': [
+    'ACI Airport Operations Certification', 'ICAO Safety Management Certificate',
+    'DGCA Regulatory Compliance Certification', 'PMP (Project Management Professional)',
+    'IATA Airport Handling Certificate'
   ]
 };
 
@@ -307,6 +322,10 @@ const workingFunctionsDatabase = {
   'Technology': [
     'Software Development', 'Data & Analytics', 'Infrastructure & DevOps', 'Product Management',
     'Security & Compliance', 'Cloud & Platform', 'Research & Development'
+  ],   
+  'Aviation Infrastructure': [
+    'Airport Operations', 'Terminal Management', 'Regulatory Compliance',
+    'Infrastructure Planning', 'Aviation Safety', 'Project Management', 'Ground Services'
   ]
 };
 
