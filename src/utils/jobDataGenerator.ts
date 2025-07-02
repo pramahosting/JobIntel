@@ -468,7 +468,7 @@ export function generateMockJobData(
   domain: string,
   limitlessMode: boolean = false
 ): JobData[] {
-  const maxJobs = limitlessMode ? 15000 : 5000; // ✳️ Change 1: hard limit
+  const maxJobs = limitlessMode ? 5000 : 1000; // ✳️ Change 1: hard limit
   const jobs: JobData[] = [];
 
   const countryData = companyData[country] || companyData['USA'];
