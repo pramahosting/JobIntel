@@ -1,27 +1,3 @@
-export interface JobData {
-  jobGroup?: string;
-  jobTitle: string;
-  businessDomain: string;
-  companyName: string;
-  companyType?: string;
-  jobLocation: string;
-  jobType: string;
-  datePosted: string;
-  responsibilities: string[];
-  keySkills: string[];
-  softSkills: string[];
-  toolsTechnologies: string[];
-  experienceYears: string;
-  experienceLevel: string;
-  certifications: string[];
-  educationRequired: string;
-  industryKeywords: string[];
-  workingFunction: string;
-  jobPortalSource: string;
-  sourceUrl: string;
-  standardSkills?: string[];
-}
-
 // Corrected companyData object
 export interface JobData {
   jobGroup?: string;
@@ -226,11 +202,11 @@ const skillsDatabase = {
     'Cybersecurity', 'API Development', 'Database Management', 'System Architecture', 'Agile Methodology'
   ],
   'Aviation Infrastructure': [
-  'Airport Operations Management', 'Air Traffic Control Coordination', 'Civil Aviation Regulations',
-  'Infrastructure Planning', 'Flight Scheduling Systems', 'Aviation Safety Management',
-  'Passenger Flow Optimization', 'Airport Security Compliance', 'Baggage Handling Systems',
-  'Aviation Logistics and Ground Handling'
-]
+    'Airport Operations Management', 'Air Traffic Control Coordination', 'Civil Aviation Regulations',
+    'Infrastructure Planning', 'Flight Scheduling Systems', 'Aviation Safety Management',
+    'Passenger Flow Optimization', 'Airport Security Compliance', 'Baggage Handling Systems',
+    'Aviation Logistics and Ground Handling'
+  ]
 };
 
 const jobTitlesDatabase = {
@@ -256,7 +232,7 @@ const jobTitlesDatabase = {
     'Cloud Architect', 'Security Engineer', 'Full Stack Developer', 'System Administrator',
     'UX/UI Designer', 'Technical Lead', 'Platform Engineer', 'Machine Learning Engineer'
   ],
-    'Aviation Infrastructure': [
+  'Aviation Infrastructure': [
     'Airport Operations Manager', 'Aviation Project Engineer', 'Terminal Operations Specialist',
     'Ground Handling Supervisor', 'Infrastructure Planning Analyst', 'Airside Safety Manager'
   ]
@@ -285,10 +261,10 @@ const toolsDatabase = {
     'Git', 'Jenkins', 'MongoDB', 'PostgreSQL'
   ],
   'Aviation Infrastructure': [
-  'AODB (Airport Operational Database)', 'RMS (Resource Management System)', 'SCADA Systems',
-  'Flight Information Display System (FIDS)', 'AutoCAD', 'Primavera P6', 'GIS Tools',
-  'CCTV & Surveillance Systems', 'Access Control Systems', 'Airport Billing Systems'
-]
+    'AODB (Airport Operational Database)', 'RMS (Resource Management System)', 'SCADA Systems',
+    'Flight Information Display System (FIDS)', 'AutoCAD', 'Primavera P6', 'GIS Tools',
+    'CCTV & Surveillance Systems', 'Access Control Systems', 'Airport Billing Systems'
+  ]
 };
 
 const certificationsDatabase = {
@@ -309,9 +285,9 @@ const certificationsDatabase = {
     'Certified Kubernetes Administrator', 'CompTIA Security+', 'Scrum Master Certification'
   ],
   'Aviation Infrastructure': [
-  'ICAO Safety Management Certification', 'DGCA Certification (India)', 'IATA Airport Operations',
-  'Airport Security Training', 'Aerodrome Operations Certification'
-]
+    'ICAO Safety Management Certification', 'DGCA Certification (India)', 'IATA Airport Operations',
+    'Airport Security Training', 'Aerodrome Operations Certification'
+  ]
 };
 
 const workingFunctionsDatabase = {
@@ -332,9 +308,9 @@ const workingFunctionsDatabase = {
     'Security & Compliance', 'Cloud & Platform', 'Research & Development'
   ],
   'Aviation Infrastructure': [
-  'Airport Operations', 'Infrastructure Planning', 'Security & Compliance', 'Ground Services Management',
-  'Passenger Services', 'Flight Operations', 'Aviation Logistics'
-]
+    'Airport Operations', 'Infrastructure Planning', 'Security & Compliance', 'Ground Services Management',
+    'Passenger Services', 'Flight Operations', 'Aviation Logistics'
+  ]
 };
 
 function getRandomItems<T>(arr: T[], count: number): T[] {
@@ -518,11 +494,7 @@ export function generateMockJobData(
 ): JobData[] {
   const maxJobs = 5000; // ✳️ Change 1: hard limit
   const jobs: JobData[] = [];
-
-  const countryData = companyData[country] || companyData['USA'];const normalizedDomain = domain.trim().toLowerCase();
-  const domainKey = Object.keys(countryData).find(
-    key => key.trim().toLowerCase() === normalizedDomain
-    );
+  
   const domainData = domainKey ? countryData[domainKey] : Object.values(countryData)[0];
   
   const relevantCompanies = domainData.companies;
