@@ -23,22 +23,12 @@ export interface JobData {
 }
 
 // Expanded company data for different countries and domains
-export const companyData: Record<
-  string,
-  Record<
-    string,
-    {
-      companies: string[];
-      types: Record<string, string>;
-    }
-  >
-> = {
-  Australia: {
+const companyData = {
+  'Australia': {
     'Banking & Financial Services': {
       companies: [
-        'Commonwealth Bank of Australia', 'Westpac Banking Corporation',
-        'Australia and New Zealand Banking Group (ANZ)', 'National Australia Bank (NAB)',
-        'Macquarie Bank', 'Suncorp Group', 'QBE Insurance Group',
+        'Commonwealth Bank of Australia', 'Westpac Banking Corporation', 'Australia and New Zealand Banking Group (ANZ)',
+        'National Australia Bank (NAB)', 'Macquarie Bank', 'Suncorp Group', 'QBE Insurance Group',
         'Insurance Australia Group (IAG)', 'AMP Limited', 'Bendigo and Adelaide Bank'
       ],
       types: {
@@ -54,7 +44,7 @@ export const companyData: Record<
         'Bendigo and Adelaide Bank': 'Banking'
       }
     },
-    Healthcare: {
+    'Healthcare': {
       companies: [
         'Ramsay Health Care', 'Healius Limited', 'Sonic Healthcare', 'CSL Limited',
         'Cochlear Limited', 'ResMed Inc', 'Medibank Private', 'Bupa Australia',
@@ -74,7 +64,7 @@ export const companyData: Record<
         'Australian Unity': 'Health & Financial Services'
       }
     },
-    Government: {
+    'Government': {
       companies: [
         'Department of Finance', 'Australian Taxation Office', 'Department of Defence',
         'Department of Health', 'Services Australia', 'Australian Bureau of Statistics',
@@ -91,7 +81,7 @@ export const companyData: Record<
         'Department of Infrastructure': 'Government'
       }
     },
-    Technology: {
+    'Technology': {
       companies: [
         'Atlassian', 'Canva', 'Afterpay', 'Xero', 'REA Group', 'Seek Limited',
         'WiseTech Global', 'TechnologyOne', 'Computershare', 'NextDC'
@@ -108,27 +98,10 @@ export const companyData: Record<
         'Computershare': 'Technology Services',
         'NextDC': 'Data Centers'
       }
-    },
-    'Aviation Infrastructure': {
-      companies: [
-        'Sydney Airport', 'Melbourne Airport', 'Brisbane Airport Corporation',
-        'Perth Airport', 'Adelaide Airport', 'Gold Coast Airport',
-        'Airservices Australia'
-      ],
-      types: {
-        'Sydney Airport': 'Airport Operator',
-        'Melbourne Airport': 'Airport Operator',
-        'Brisbane Airport Corporation': 'Airport Operator',
-        'Perth Airport': 'Airport Operator',
-        'Adelaide Airport': 'Airport Operator',
-        'Gold Coast Airport': 'Airport Operator',
-        'Airservices Australia': 'Air Navigation Services'
-      }
     }
   },
-
-  USA: {
-    Government: {
+  'USA': {
+    'Government': {
       companies: [
         'Department of Treasury', 'Federal Reserve', 'Internal Revenue Service',
         'Department of Defense', 'Department of Homeland Security', 'Centers for Disease Control',
@@ -161,7 +134,7 @@ export const companyData: Record<
         'Charles Schwab': 'Investment Services'
       }
     },
-    Healthcare: {
+    'Healthcare': {
       companies: [
         'Johnson & Johnson', 'Pfizer', 'UnitedHealth Group', 'Merck & Co',
         'Abbott Laboratories', 'Medtronic', 'Anthem Inc', 'CVS Health'
@@ -177,7 +150,7 @@ export const companyData: Record<
         'CVS Health': 'Healthcare Services'
       }
     },
-    Technology: {
+    'Technology': {
       companies: [
         'Microsoft', 'Apple', 'Google', 'Amazon', 'Meta', 'Tesla',
         'Netflix', 'Adobe', 'Salesforce', 'Oracle'
@@ -193,114 +166,6 @@ export const companyData: Record<
         'Adobe': 'Software',
         'Salesforce': 'Software',
         'Oracle': 'Software'
-      }
-    },
-    'Aviation Infrastructure': {
-      companies: [
-        'Federal Aviation Administration (FAA)', 'Port Authority of NY and NJ',
-        'Los Angeles World Airports (LAWA)', 'Dallas/Fort Worth International Airport',
-        'Denver International Airport', 'Chicago O\'Hare International Airport',
-        'Atlanta Hartsfield-Jackson International Airport'
-      ],
-      types: {
-        'Federal Aviation Administration (FAA)': 'Regulator',
-        'Port Authority of NY and NJ': 'Airport Operator',
-        'Los Angeles World Airports (LAWA)': 'Airport Operator',
-        'Dallas/Fort Worth International Airport': 'Airport Operator',
-        'Denver International Airport': 'Airport Operator',
-        'Chicago O\'Hare International Airport': 'Airport Operator',
-        'Atlanta Hartsfield-Jackson International Airport': 'Airport Operator'
-      }
-    }
-  },
-
-  India: {
-    'Aviation Infrastructure': {
-      companies: [
-        'GMR Group', 'GVK Industries', 'Airports Authority of India (AAI)',
-        'BIAL (Bangalore International Airport Limited)', 'Mumbai International Airport Ltd (MIAL)',
-        'Delhi International Airport Limited (DIAL)', 'Adani Airport Holdings', 'Hyderabad International Airport Ltd (HIAL)'
-      ],
-      types: {
-        'GMR Group': 'Infrastructure & Airport Operator',
-        'GVK Industries': 'Infrastructure & Airport Operator',
-        'Airports Authority of India (AAI)': 'Government',
-        'BIAL (Bangalore International Airport Limited)': 'Airport Operations',
-        'Mumbai International Airport Ltd (MIAL)': 'Airport Operations',
-        'Delhi International Airport Limited (DIAL)': 'Airport Operations',
-        'Adani Airport Holdings': 'Private Infrastructure',
-        'Hyderabad International Airport Ltd (HIAL)': 'Airport Operations'
-      }
-    },
-    'Banking & Financial Services': {
-      companies: [
-        'State Bank of India', 'ICICI Bank', 'HDFC Bank', 'Axis Bank',
-        'Kotak Mahindra Bank', 'Punjab National Bank', 'Yes Bank', 'IndusInd Bank',
-        'LIC of India', 'Bajaj Finserv', 'SBI Life Insurance'
-      ],
-      types: {
-        'State Bank of India': 'Banking',
-        'ICICI Bank': 'Banking',
-        'HDFC Bank': 'Banking',
-        'Axis Bank': 'Banking',
-        'Kotak Mahindra Bank': 'Banking',
-        'Punjab National Bank': 'Banking',
-        'Yes Bank': 'Banking',
-        'IndusInd Bank': 'Banking',
-        'LIC of India': 'Insurance',
-        'Bajaj Finserv': 'Financial Services',
-        'SBI Life Insurance': 'Insurance'
-      }
-    },
-    Healthcare: {
-      companies: [
-        'Apollo Hospitals', 'Fortis Healthcare', 'Max Healthcare', 'Dr. Lal PathLabs',
-        'Metropolis Healthcare', 'Sun Pharma', 'Cipla', 'Serum Institute of India'
-      ],
-      types: {
-        'Apollo Hospitals': 'Hospital Network',
-        'Fortis Healthcare': 'Hospital Network',
-        'Max Healthcare': 'Hospital Network',
-        'Dr. Lal PathLabs': 'Diagnostics',
-        'Metropolis Healthcare': 'Diagnostics',
-        'Sun Pharma': 'Pharmaceuticals',
-        'Cipla': 'Pharmaceuticals',
-        'Serum Institute of India': 'Biotech / Vaccines'
-      }
-    },
-    Technology: {
-      companies: [
-        'Tata Consultancy Services (TCS)', 'Infosys', 'Wipro', 'HCL Technologies',
-        'Tech Mahindra', 'LTIMindtree', 'Zoho Corporation', 'Freshworks',
-        'Persistent Systems', 'Birlasoft'
-      ],
-      types: {
-        'Tata Consultancy Services (TCS)': 'IT Services',
-        'Infosys': 'IT Services',
-        'Wipro': 'IT Services',
-        'HCL Technologies': 'IT Services',
-        'Tech Mahindra': 'IT Services',
-        'LTIMindtree': 'IT Services',
-        'Zoho Corporation': 'Software Product',
-        'Freshworks': 'SaaS',
-        'Persistent Systems': 'Digital Engineering',
-        'Birlasoft': 'IT Services'
-      }
-    },
-    Government: {
-      companies: [
-        'NITI Aayog', 'Ministry of Finance', 'Ministry of Health and Family Welfare',
-        'Indian Railways', 'UIDAI', 'ISRO', 'DRDO', 'Reserve Bank of India'
-      ],
-      types: {
-        'NITI Aayog': 'Government',
-        'Ministry of Finance': 'Government',
-        'Ministry of Health and Family Welfare': 'Government',
-        'Indian Railways': 'Government',
-        'UIDAI': 'Government',
-        'ISRO': 'Government',
-        'DRDO': 'Government',
-        'Reserve Bank of India': 'Government / Regulator'
       }
     }
   }
