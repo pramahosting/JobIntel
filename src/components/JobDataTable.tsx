@@ -1,4 +1,5 @@
-import React, { useRef, useEffect } from 'react';
+
+import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
@@ -11,31 +12,6 @@ interface JobDataTableProps {
 }
 
 const JobDataTable: React.FC<JobDataTableProps> = ({ jobData }) => {
-  const topScrollRef = useRef<HTMLDivElement>(null);
-  const bottomScrollRef = useRef<HTMLDivElement>(null);
-
-  // Adjust this width to match your table's total width (sum of min-width of all columns)
-  const tableWidth = 2300; 
-
-  // Synchronize scrolling between top and bottom scrollbars
-  const handleTopScroll = () => {
-    if (bottomScrollRef.current && topScrollRef.current) {
-      bottomScrollRef.current.scrollLeft = topScrollRef.current.scrollLeft;
-    }
-  };
-
-  const handleBottomScroll = () => {
-    if (topScrollRef.current && bottomScrollRef.current) {
-      topScrollRef.current.scrollLeft = bottomScrollRef.current.scrollLeft;
-    }
-  };
-
-  useEffect(() => {
-    if (topScrollRef.current && bottomScrollRef.current) {
-      topScrollRef.current.scrollLeft = bottomScrollRef.current.scrollLeft;
-    }
-  }, []);
-
   if (jobData.length === 0) {
     return (
       <Card>
@@ -93,22 +69,7 @@ const JobDataTable: React.FC<JobDataTableProps> = ({ jobData }) => {
         <CardTitle>JobIntel Market Intelligence Data</CardTitle>
       </CardHeader>
       <CardContent>
-        {/* Your statistics or analytics above table here, if any */}
-        {/* Example: <AnalyticsMetrics jobData={jobData} /> */}
-
-        {/* Top horizontal scrollbar */}
-        <div
-          ref={topScrollRef}
-          className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 h-4 mb-1"
-          style={{ overflowY: 'hidden' }}
-          onScroll={handleTopScroll}
-        >
-          {/* Dummy div with exact width of the table */}
-          <div style={{ width: tableWidth, height: 1 }} />
-        </div>
-
-        {/* Table Header fixed */}
-        <div className="overflow-hidden">
+        <div className="overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
@@ -128,19 +89,8 @@ const JobDataTable: React.FC<JobDataTableProps> = ({ jobData }) => {
                 <TableHead className="min-w-[80px]">Action</TableHead>
               </TableRow>
             </TableHeader>
-          </Table>
-        </div>
-
-        {/* Scrollable Table Body */}
-        <div
-          ref={bottomScrollRef}
-          className="overflow-x-auto max-h-[60vh]"
-          onScroll={handleBottomScroll}
-          style={{ overflowY: 'auto' }}
-        >
-          <Table>
             <TableBody>
-              {Object.entries(groupedJobs).map(([groupName, jobs]) =>
+              {Object.entries(groupedJobs).map(([groupName, jobs]) => 
                 jobs.map((job, jobIndex) => (
                   <TableRow key={`${groupName}-${jobIndex}`} className="hover:bg-gray-50">
                     {jobIndex === 0 && (
@@ -194,10 +144,14 @@ const JobDataTable: React.FC<JobDataTableProps> = ({ jobData }) => {
                       {renderSkillBadges(job.certifications, 'border-blue-200 text-blue-700', 2)}
                     </TableCell>
                     <TableCell>
-                      <Badge className="bg-blue-100 text-blue-800">{job.jobType}</Badge>
+                      <Badge className="bg-blue-100 text-blue-800">
+                        {job.jobType}
+                      </Badge>
                     </TableCell>
                     <TableCell>
-                      <Badge className="bg-purple-100 text-purple-800">{job.jobPortalSource}</Badge>
+                      <Badge className="bg-purple-100 text-purple-800">
+                        {job.jobPortalSource}
+                      </Badge>
                     </TableCell>
                     <TableCell>
                       <Button variant="outline" size="sm" className="h-7">
@@ -216,4 +170,3 @@ const JobDataTable: React.FC<JobDataTableProps> = ({ jobData }) => {
 };
 
 export default JobDataTable;
-
