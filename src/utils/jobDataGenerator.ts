@@ -114,6 +114,25 @@ const companyData = {
         'Gold Coast Airport': 'Airport Operator',
         'Airservices Australia': 'Air Navigation Services'
       }
+    },
+    'Automobiles': {
+      companies: [
+        'Toyota Australia', 'Holden', 'Ford Australia', 'Mitsubishi Motors Australia',
+        'Isuzu UTE Australia', 'Mazda Australia', 'Nissan Australia', 'Bosch Australia',
+        'Bridgestone Australia', 'Volvo Group Australia'
+      ],
+      types: {
+        'Toyota Australia': 'Automotive Manufacturing',
+        'Holden': 'Automotive Manufacturing',
+        'Ford Australia': 'Automotive Manufacturing',
+        'Mitsubishi Motors Australia': 'Automotive Manufacturing',
+        'Isuzu UTE Australia': 'Commercial Vehicles',
+        'Mazda Australia': 'Passenger Cars',
+        'Nissan Australia': 'Passenger Cars',
+        'Bosch Australia': 'Automotive Components',
+        'Bridgestone Australia': 'Tyres & Components',
+        'Volvo Group Australia': 'Commercial Vehicles'
+      }
     }
   },
   'USA': {
@@ -200,6 +219,24 @@ const companyData = {
         'Chicago O\'Hare International Airport': 'Airport Operator',
         'Atlanta Hartsfield-Jackson International Airport': 'Airport Operator'
       }
+    },
+    'Automobiles': {
+      companies: [
+        'Ford Motor Company', 'General Motors', 'Tesla', 'Stellantis North America', 'Rivian',
+        'Lucid Motors', 'Harley-Davidson', 'Cummins Inc.', 'BorgWarner', 'Goodyear Tire & Rubber Company'
+      ],
+      types: {
+        'Ford Motor Company': 'Automotive Manufacturing',
+        'General Motors': 'Automotive Manufacturing',
+        'Tesla': 'Electric Vehicles',
+        'Stellantis North America': 'Automotive Manufacturing',
+        'Rivian': 'Electric Vehicles',
+        'Lucid Motors': 'Electric Vehicles',
+        'Harley-Davidson': 'Motorcycles',
+        'Cummins Inc.': 'Engines & Power Systems',
+        'BorgWarner': 'Automotive Components',
+        'Goodyear Tire & Rubber Company': 'Tires'
+      }
     }
   }, 
   'India': {
@@ -274,6 +311,24 @@ const companyData = {
         'Adani Airport Holdings': 'Private Infrastructure',
         'Hyderabad International Airport Ltd (HIAL)': 'Airport Operations'
       }
+    },
+    'Automobiles': {
+      companies: [
+        'Tata Motors', 'Mahindra & Mahindra', 'Maruti Suzuki', 'Ashok Leyland', 'Hero MotoCorp',
+        'TVS Motor Company', 'Bajaj Auto', 'Hyundai India', 'Renault India', 'Honda Cars India'
+      ],
+      types: {
+        'Tata Motors': 'Automotive Manufacturing',
+        'Mahindra & Mahindra': 'Automotive & Agriculture Equipment',
+        'Maruti Suzuki': 'Passenger Cars',
+        'Ashok Leyland': 'Commercial Vehicles',
+        'Hero MotoCorp': 'Motorcycles',
+        'TVS Motor Company': 'Motorcycles & Scooters',
+        'Bajaj Auto': 'Two & Three Wheelers',
+        'Hyundai India': 'Passenger Cars',
+        'Renault India': 'Passenger Cars',
+        'Honda Cars India': 'Passenger Cars'
+      }
     }
   }
 };
@@ -311,6 +366,11 @@ const skillsDatabase = {
     'Airport Operations', 'Ground Handling', 'Airspace Management', 'Aviation Safety',
     'Regulatory Compliance (DGCA/ICAO)', 'Infrastructure Planning', 'Air Traffic Control Systems',
     'Runway Maintenance', 'Passenger Experience Management', 'Terminal Management'
+  ],
+  'Automobiles': [
+    'Automobile Engineering', 'Vehicle Dynamics', 'CAD Design', 'Powertrain Systems',
+    'Electrical Vehicles', 'ADAS', 'Thermal Engineering', 'Testing & Validation',
+    'Manufacturing Processes', 'Quality Assurance', 'ISO/TS16949', 'IATF Standards'
   ]
 };
 
@@ -342,6 +402,11 @@ const jobTitlesDatabase = {
     'Air Traffic Systems Engineer', 'Aviation Project Manager', 'Terminal Operations Lead',
     'Ground Handling Supervisor', 'Infrastructure Planning Specialist', 'Airport Safety Officer',
     'Airline Liaison Manager'
+  ],
+  'Automobiles': [
+    'Automobile Design Engineer', 'Powertrain Engineer', 'EV Battery Specialist',
+    'Quality Assurance Engineer', 'Production Planning Engineer', 'Vehicle Integration Engineer',
+    'R&D Engineer – Automotive', 'Test & Validation Engineer', 'NVH Engineer', 'Thermal System Engineer'
   ]
 };
 
@@ -370,6 +435,10 @@ const toolsDatabase = {
   'Aviation Infrastructure': [
     'AutoCAD', 'Primavera P6', 'ArcGIS', 'Simmod', 'AODB Systems', 'SCADA Systems',
     'Airport Management Software', 'IATA Timatic', 'IBM Maximo', 'Power BI'
+  ],
+  'Automobiles': [
+    'AutoCAD', 'CATIA', 'SolidWorks', 'ANSYS', 'MATLAB/Simulink', 'CANalyzer',
+    'DSPACE', 'NX Siemens', 'AVL Cruise', 'PDM Software'
   ]
 };
 
@@ -394,6 +463,10 @@ const certificationsDatabase = {
     'ACI Airport Operations Certification', 'ICAO Safety Management Certificate',
     'DGCA Regulatory Compliance Certification', 'PMP (Project Management Professional)',
     'IATA Airport Handling Certificate'
+  ],
+  'Automobiles': [
+    'ISO/TS16949', 'IATF 16949', 'Six Sigma Green Belt', 'Automotive Functional Safety Certification',
+    'Electric Vehicle Technology Certification'
   ]
 };
 
@@ -417,6 +490,10 @@ const workingFunctionsDatabase = {
   'Aviation Infrastructure': [
     'Airport Operations', 'Terminal Management', 'Regulatory Compliance',
     'Infrastructure Planning', 'Aviation Safety', 'Project Management', 'Ground Services'
+  ],
+  'Automobiles': [
+    'Vehicle Engineering', 'Manufacturing Engineering', 'Product Design', 'Automotive R&D',
+    'Powertrain Development', 'EV Systems', 'Quality & Testing'
   ]
 };
 
